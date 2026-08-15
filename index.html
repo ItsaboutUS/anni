@@ -334,15 +334,16 @@
     }
     updateCounter();
 
-    // 2. Divide 59 Photos into 5 Sections
-    const totalPhotos = 59;
-    const photosPerSection = [12, 12, 12, 12, 11];
+    // 2. Divide 69 Photos into 5 Sections
+    const totalPhotos = 69;
+    // Distribution: 14 + 14 + 14 + 14 + 13 = 69 photos
+    const photosPerSection = [14, 14, 14, 14, 13];
     let currentPhotoIndex = 1;
 
     for (let sec = 1; sec <= 5; sec++) {
       const gridContainer = document.getElementById(`grid-${sec}`);
       const count = photosPerSection[sec - 1];
- 
+
       for (let i = 0; i < count; i++) {
         const photoNum = currentPhotoIndex;
         const photoCard = document.createElement('div');
@@ -352,7 +353,7 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        // Matches exact clean pattern: images/dj(1).jpg, images/dj(2).jpg, etc.
+        // Matches exact clean pattern: images/dj(1).jpg ... images/dj(69).jpg
         img.src = `images/dj(${photoNum}).jpg`;
 
         const caption = document.createElement('div');
