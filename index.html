@@ -177,13 +177,28 @@
   </div>
 
   <script>
-    // 1. Riddles Configuration
+    // 1. Riddles Configuration with Flexible Answer Support
     const riddles = [
-      { question: "Where was our very first date?", answer: "coffee" },
-      { question: "What is my favorite nickname for you?", answer: "chakli" },
-      { question: "Which month did we first start talking?", answer: "august" },
-      { question: "What is our favorite shared food?", answer: "pizza" },
-      { question: "What is the magic word?", answer: "love" }
+      { 
+        question: "How many rejections did I get before you said yes?", 
+        answer: ["9", "nine", "9 rejections", "nine rejections"] 
+      },
+      { 
+        question: "What is my favorite nickname for you?", 
+        answer: ["chakli", "chaklee"] 
+      },
+      { 
+        question: "Which was the first place we went for our trip?", 
+        answer: ["karjat"] 
+      },
+      { 
+        question: "What is the time you said yes?", 
+        answer: ["1:11", "1.11", "111", "1:11 am", "1:11 pm", "1:11am", "1:11pm"] 
+      },
+      { 
+        question: "What is the name of our LOVE?", 
+        answer: ["us", "itsaboutus", "its about us"] 
+      }
     ];
 
     let currentRiddleIndex = 1;
@@ -231,10 +246,20 @@
     // 3. Quiz Submission and Section Unlocking
     function handleRiddleSubmit() {
       const answerInput = document.getElementById('riddle-input');
-      const userAnswer = answerInput.value.trim().toLowerCase();
-      const expectedAnswer = riddles[currentRiddleIndex - 1].answer.toLowerCase();
+      const rawUserAnswer = answerInput.value;
+      
+      // Clean function to ignore spaces, colons, capitalization, and punctuation
+      const clean = (str) => str.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
 
-      if (userAnswer === expectedAnswer) {
+      const userCleaned = clean(rawUserAnswer);
+      const currentRiddle = riddles[currentRiddleIndex - 1];
+
+      // Check if user answer matches ANY of the valid answer variations
+      const isCorrect = Array.isArray(currentRiddle.answer)
+        ? currentRiddle.answer.some(ans => clean(ans) === userCleaned)
+        : clean(currentRiddle.answer) === userCleaned;
+
+      if (isCorrect) {
         // Unlock current section
         const currentSection = document.getElementById(`section-${currentRiddleIndex}`);
         currentSection.classList.add('unlocked');
@@ -244,13 +269,13 @@
         if (currentRiddleIndex <= 5) {
           const nextSection = document.getElementById(`section-${currentRiddleIndex}`);
           
-          // Move quiz box right above the next section
+          // Move quiz box right above next section
           nextSection.parentNode.insertBefore(document.getElementById('quiz-box'), nextSection);
           
           updateRiddleUI(currentRiddleIndex);
           answerInput.value = '';
         } else {
-          // Hide quiz box when all sections are unlocked
+          // Hide quiz box when all sections unlocked
           document.getElementById('quiz-box').style.display = 'none';
         }
       } else {
