@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Anniversary, My Chakli, My Kiddo!</title>
+  <title>Happy Anniversary, My Love!</title>
   <style>
     :root {
       --primary-color: #ff69b4;
@@ -34,30 +34,58 @@
       background: linear-gradient(135deg, #ff69b4, #ff1493);
       color: white;
       text-align: center;
-      padding: 15px 10px;
+      padding: 18px 10px;
       box-shadow: 0 4px 12px rgba(255, 20, 147, 0.3);
     }
 
     header h1 {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
-    .counter-badge {
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .counter-box {
       display: inline-block;
       background: rgba(255, 255, 255, 0.25);
-      padding: 4px 14px;
+      padding: 5px 16px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
       backdrop-filter: blur(5px);
     }
 
     .container {
       max-width: 1000px;
-      margin: 20px auto;
+      margin: 25px auto;
       padding: 0 15px;
+    }
+
+    /* Main Love Letter Card Styling */
+    .letter-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 25px 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+      border-left: 5px solid #ff1493;
+    }
+
+    .letter-card h2 {
+      color: #ff1493;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .letter-card p {
+      font-size: 1rem;
+      color: #4a4a4a;
+      line-height: 1.8;
     }
 
     /* Quiz Box Styling */
@@ -268,11 +296,22 @@
 
   <!-- Constant Header with Pink Background & Live Counter -->
   <header>
-    <h1>Happy Anniversary, My Chakli, My Kiddo!</h1>
-    <div class="counter-badge">1815 Days Together & Counting ❤️</div>
+    <h1>Happy Anniversary, My Love!</h1>
+    <p>Celebrating Our Journey Together</p>
+    <div class="counter-box" id="counter">Calculating our days together...</div>
   </header>
 
   <div class="container">
+    
+    <!-- Main Love Letter (Visible) -->
+    <div class="letter-card">
+      <h2>To My Favorite Person,</h2>
+      <p>
+        Looking back at these past 5 years since August 25, 2021, I am so grateful for every single moment we've shared. From all our spontaneous adventures to quiet moments at home, you make every day brighter.
+        <br><br>
+        Thank you for being my constant support, my best friend, and my favorite person in the world. Solve the riddles below to unlock our memories chapter by chapter! ❤️
+      </p>
+    </div>
 
     <!-- Moving Quiz Box -->
     <div id="quiz-box">
@@ -333,7 +372,17 @@
   </div>
 
   <script>
-    // 1. Riddles Configuration with Flexible Answer Support
+    // Live Days Counter Calculation (From August 25, 2021)
+    function calculateDays() {
+      const startDate = new Date('2021-08-25');
+      const today = new Date();
+      const diffTime = Math.abs(today - startDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('counter').innerText = `${diffDays} Days Together & Counting ❤️`;
+    }
+    calculateDays();
+
+    // 1. Riddles Configuration
     const riddles = [
       { 
         question: "How many rejections did I get before you said yes?", 
@@ -416,7 +465,7 @@
         const currentSection = document.getElementById(`section-${currentRiddleIndex}`);
         currentSection.classList.add('unlocked');
 
-        // Trigger floating balloons animation burst across the screen
+        // Trigger floating balloons burst across screen
         triggerBalloonBurst();
 
         currentRiddleIndex++;
@@ -424,7 +473,7 @@
         if (currentRiddleIndex <= 5) {
           const nextSection = document.getElementById(`section-${currentRiddleIndex}`);
           
-          // Move quiz box directly above the newly revealed section
+          // Move quiz box directly above newly revealed section
           nextSection.parentNode.insertBefore(document.getElementById('quiz-box'), nextSection);
           
           updateRiddleUI(currentRiddleIndex);
@@ -443,7 +492,7 @@
       }
     });
 
-    // Spawn 15 Floating Balloons across the screen on correct answer
+    // Spawn 15 Floating Balloons across screen on correct answer
     function triggerBalloonBurst() {
       const colors = ['#ff4d6d', '#ff1493', '#ff69b4', '#ff85a2', '#ff007f'];
       for (let i = 0; i < 15; i++) {
