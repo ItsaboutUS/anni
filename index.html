@@ -352,8 +352,8 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        // Simple direct path: images/1.jpg, images/2.jpg, etc.
-        img.src = `images/${photoNum}.jpg`;
+        // Matches exact clean pattern: images/dj(1).jpg, images/dj(2).jpg, etc.
+        img.src = `images/dj(${photoNum}).jpg`;
 
         const caption = document.createElement('div');
         caption.className = 'photo-caption';
