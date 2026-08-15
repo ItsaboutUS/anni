@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Anniversary, My Chakli, My Kiddo!</title>
   <style>
-    /* Global Styles */
     :root {
       --primary-color: #ff69b4;
       --bg-color: #fff0f5;
@@ -24,17 +23,41 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       line-height: 1.6;
-      padding: 20px 10px;
+      padding-bottom: 40px;
     }
 
+    /* Fixed Top Pink Header Banner */
     header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      color: white;
       text-align: center;
-      margin-bottom: 20px;
+      padding: 15px 10px;
+      box-shadow: 0 4px 12px rgba(255, 20, 147, 0.3);
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .counter-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      backdrop-filter: blur(5px);
     }
 
     .container {
       max-width: 1000px;
-      margin: 0 auto;
+      margin: 20px auto;
+      padding: 0 15px;
     }
 
     /* Quiz Box Styling */
@@ -126,7 +149,36 @@
       font-weight: bold;
     }
 
-    /* Final Celebration & Balloon Styles */
+    /* Floating Balloons Burst on Section Reveal */
+    .floating-balloon {
+      position: fixed;
+      bottom: -100px;
+      width: 40px;
+      height: 50px;
+      background: #ff4d6d;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      z-index: 999;
+      opacity: 0.85;
+      animation: floatUp 3.5s linear forwards;
+      pointer-events: none;
+    }
+
+    .floating-balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 17px;
+      border-left: 3px solid transparent;
+      border-right: 3px solid transparent;
+      border-bottom: 8px solid #ff4d6d;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+    }
+
+    /* Final Interactive Balloon Box */
     #celebration-box {
       display: none;
       text-align: center;
@@ -134,39 +186,39 @@
       cursor: pointer;
     }
 
-    .balloon {
-      width: 100px;
-      height: 120px;
-      background: #ff4d6d;
+    .interactive-balloon {
+      width: 110px;
+      height: 130px;
+      background: #ff1493;
       border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
       margin: 0 auto;
       position: relative;
-      animation: float 2.5s ease-in-out infinite;
-      box-shadow: inset -10px -10px 20px rgba(0,0,0,0.15);
+      animation: floatIdle 2.5s ease-in-out infinite;
+      box-shadow: inset -10px -10px 20px rgba(0,0,0,0.15), 0 10px 20px rgba(255, 20, 147, 0.3);
     }
 
-    .balloon::after {
+    .interactive-balloon::after {
       content: "";
       position: absolute;
       bottom: -12px;
-      left: 45px;
+      left: 50px;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
-      border-bottom: 12px solid #ff4d6d;
+      border-bottom: 12px solid #ff1493;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(-3deg); }
-      50% { transform: translateY(-18px) rotate(3deg); }
+    @keyframes floatIdle {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-18px) rotate(4deg); }
     }
 
-    /* Popped Heart Reveal */
+    /* Love Message Reveal */
     #love-message {
       display: none;
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       font-weight: bold;
       color: #ff1493;
-      text-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+      text-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
       animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
@@ -214,13 +266,13 @@
 </head>
 <body>
 
-  <!-- Background Music -->
-  <audio id="bg-music" loop autoplay src="song.mp3"></audio>
+  <!-- Constant Header with Pink Background & Live Counter -->
+  <header>
+    <h1>Happy Anniversary, My Chakli, My Kiddo!</h1>
+    <div class="counter-badge">1815 Days Together & Counting ❤️</div>
+  </header>
 
   <div class="container">
-    <header>
-      <h1>Happy Anniversary, My Chakli, My Kiddo!</h1>
-    </header>
 
     <!-- Moving Quiz Box -->
     <div id="quiz-box">
@@ -232,11 +284,11 @@
       </div>
     </div>
 
-    <!-- Celebration Box (Balloon & Love Message) -->
+    <!-- Final Celebration Box (Interactive Pop Balloon) -->
     <div id="celebration-box">
       <div id="balloon-container" onclick="popBalloon()">
-        <div class="balloon"></div>
-        <p style="margin-top: 15px; color: #ff1493; font-weight: bold;">Tap the balloon to pop it! 🎈</p>
+        <div class="interactive-balloon"></div>
+        <p style="margin-top: 15px; color: #ff1493; font-weight: bold; font-size: 1.1rem;">Tap the balloon to pop it! 🎈</p>
       </div>
       
       <div id="love-message">
@@ -281,7 +333,7 @@
   </div>
 
   <script>
-    // 1. Riddles Configuration with Multi-Format Support
+    // 1. Riddles Configuration with Flexible Answer Support
     const riddles = [
       { 
         question: "How many rejections did I get before you said yes?", 
@@ -340,25 +392,21 @@
       }
     }
 
-    // Initialize Riddle UI
     function updateRiddleUI(index) {
       document.getElementById('riddle-title').innerText = `Chapter ${index} Riddle`;
       document.getElementById('riddle-question').innerText = riddles[index - 1].question;
     }
     updateRiddleUI(1);
 
-    // 3. Quiz Submission and Section Unlocking
+    // 3. Quiz Submission & Balloon Spawning
     function handleRiddleSubmit() {
       const answerInput = document.getElementById('riddle-input');
       const rawUserAnswer = answerInput.value;
       
-      // Clean function to ignore spaces, colons, capitalization, and punctuation
       const clean = (str) => str.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
-
       const userCleaned = clean(rawUserAnswer);
       const currentRiddle = riddles[currentRiddleIndex - 1];
 
-      // Check if user answer matches ANY of the valid answer variations
       const isCorrect = Array.isArray(currentRiddle.answer)
         ? currentRiddle.answer.some(ans => clean(ans) === userCleaned)
         : clean(currentRiddle.answer) === userCleaned;
@@ -368,12 +416,15 @@
         const currentSection = document.getElementById(`section-${currentRiddleIndex}`);
         currentSection.classList.add('unlocked');
 
+        // Trigger floating balloons animation burst across the screen
+        triggerBalloonBurst();
+
         currentRiddleIndex++;
 
         if (currentRiddleIndex <= 5) {
           const nextSection = document.getElementById(`section-${currentRiddleIndex}`);
           
-          // Move quiz box right above the next section
+          // Move quiz box directly above the newly revealed section
           nextSection.parentNode.insertBefore(document.getElementById('quiz-box'), nextSection);
           
           updateRiddleUI(currentRiddleIndex);
@@ -386,14 +437,30 @@
       }
     }
 
-    // Allow pressing Enter in the input box to submit
     document.getElementById('riddle-input').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         handleRiddleSubmit();
       }
     });
 
-    // 4. Celebration & Balloon Logic
+    // Spawn 15 Floating Balloons across the screen on correct answer
+    function triggerBalloonBurst() {
+      const colors = ['#ff4d6d', '#ff1493', '#ff69b4', '#ff85a2', '#ff007f'];
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const balloon = document.createElement('div');
+          balloon.className = 'floating-balloon';
+          balloon.style.left = Math.random() * 90 + 'vw';
+          balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+          balloon.style.animationDuration = (3 + Math.random() * 2) + 's';
+          document.body.appendChild(balloon);
+
+          setTimeout(() => balloon.remove(), 5000);
+        }, i * 120);
+      }
+    }
+
+    // 4. Final Celebration Box & Pop Balloon
     function showCelebration() {
       document.getElementById('quiz-box').style.display = 'none';
       const celebrationBox = document.getElementById('celebration-box');
@@ -404,7 +471,7 @@
       document.getElementById('balloon-container').style.display = 'none';
       document.getElementById('love-message').style.display = 'block';
 
-      // Start the slideshow after 1.5 seconds
+      // Start slideshow after 1.5 seconds
       setTimeout(startSlideshow, 1500);
     }
 
@@ -418,9 +485,9 @@
       
       updateSlide();
       slideshowInterval = setInterval(() => {
-        slideIndex = (slideIndex % 63) + 1; // Loops continuously through 1 to 63
+        slideIndex = (slideIndex % 63) + 1;
         updateSlide();
-      }, 3000); // Changes image every 3 seconds
+      }, 3000);
     }
 
     function updateSlide() {
@@ -435,14 +502,6 @@
       clearInterval(slideshowInterval);
       document.getElementById('slideshow-modal').style.display = 'none';
     }
-
-    // Autoplay audio on first click to bypass browser restrictions
-    document.addEventListener('click', () => {
-      const music = document.getElementById('bg-music');
-      if (music && music.paused) {
-        music.play().catch(() => {});
-      }
-    }, { once: true });
   </script>
 </body>
 </html>
