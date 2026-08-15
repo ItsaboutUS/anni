@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Anniversary! ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #e63946;
+      --bg-color: #fff5f5;
+      --text-color: #2b2d42;
+      --card-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* CONSTANT / FIXED HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+    }
+
+    .counter-box {
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.25);
+      display: inline-block;
+      padding: 5px 20px;
+      border-radius: 30px;
+      backdrop-filter: blur(5px);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .letter-card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+      border-left: 5px solid var(--primary-color);
+    }
+
+    .letter-card h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    /* QUIZ & REVEAL SECTION STYLES */
+    #quiz-box {
+      background: rgba(255, 255, 255, 0.95);
+      border: 3px solid #ff758c;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 25px rgba(255, 117, 140, 0.2);
+      position: relative;
+    }
+
+    #quiz-box h2 {
+      font-family: 'Dancing Script', cursive;
+      color: var(--primary-color);
+      font-size: 2.4rem;
+    }
+
+    #puzzle-question {
+      font-size: 1.15rem;
+      margin: 15px 0;
+      font-weight: 600;
+      color: #333;
+    }
+
+    #puzzle-input {
+      font-family: 'Poppins', sans-serif;
+      padding: 12px 18px;
+      width: 80%;
+      max-width: 350px;
+      border: 2px solid #ff758c;
+      border-radius: 25px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+    }
+
+    #puzzle-submit {
+      font-family: 'Poppins', sans-serif;
+      padding: 10px 30px;
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s;
+    }
+
+    #puzzle-submit:hover {
+      transform: scale(1.05);
+    }
+
+    /* GALLERY SECTION STYLES */
+    .section-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin: 20px 0 10px 0;
+    }
+
+    .reveal-section {
+      display: none; /* Hidden by default until unlocked */
+      animation: fadeIn 1s ease-in-out forwards;
+      margin-bottom: 40px;
+    }
+
+    .reveal-section.unlocked {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .photo-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-caption {
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: #666;
+      text-align: center;
+    }
+
+    /* BALLOONS CELEBRATION ANIMATION */
+    .balloon-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 50px;
+      height: 65px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      animation: floatUp 4s ease-in infinite;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 23px;
+      width: 2px;
+      height: 15px;
+      background: #888;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+    }
+
+    /* VIDEO SPIRAL SECTION */
+    .spiral-wrapper {
+      position: relative;
+      width: 100%;
+      height: 450px;
+      perspective: 1000px;
+      margin: 40px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .spiral-container {
+      width: 200px;
+      height: 250px;
+      position: absolute;
+      transform-style: preserve-3d;
+      animation: rotateSpiral 20s linear infinite;
+    }
+
+    .spiral-container:hover {
+      animation-play-state: paused;
+    }
+
+    .spiral-item {
+      position: absolute;
+      width: 180px;
+      height: 240px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 3px solid #ff758c;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      background: #000;
+    }
+
+    .spiral-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes rotateSpiral {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    /* WRONG ANSWER POPUP STYLES */
+    #wrong-popup {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e63946;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    #wrong-popup.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .shake-input {
+      animation: shake 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="balloon-container" id="balloon-container"></div>
+
+  <!-- STICKY HEADER -->
+  <header>
+    <h1>Happy Anniversary, My Chakli, My Kiddo!</h1>
+    <div class="counter-box" id="counter">Calculating our days together...</div>
+  </header>
+
+  <div class="container">
+    
+    <!-- Main Love Letter -->
+    <div class="letter-card">
+      <h2>To My Favorite Person,</h2>
+      <p>
+        Looking back at these past 5 years since August 25, 2021, I am so grateful for every single moment we've shared. From all our spontaneous adventures to quiet moments at home, you make every day brighter.
+        <br><br>
+        Finally we are at a phase where we can look back and appreciate all the beautiful memories we've created together. Starting from our first date, to our first trip, to our first home in a new country, and now to our future together, every milestone has been a testament to our love and commitment. <b>25th August 2021 1:11am</b> is where everything started to go crazy for me! 9 rejections, yes that have taught me how to build a stronger relationship with you. Everyday I live with you I learn about myself and about you. Everytime we go out I just love to see the smile on that face of yours, love to see that sparkle in your eyes, love to see that happiness in your heart. I just love to see you happy and I will do everything to make you happy. I just want to say thank you for being my partner, my best friend, and my everything. I love you more than words can express, and I look forward to many more years of love, laughter, and adventure with you.. I love you, I want you, I wish you, I need you everyday everytime everywhere.
+      </p>
+    </div>
+
+    <!-- PROGRESSIVE QUIZ BOX -->
+    <div id="quiz-box">
+      <div id="wrong-popup">Wrong memory! Try again ❤️</div>
+      <h2>Unlock Our Memories</h2>
+      <p style="color: #666; font-size: 0.9rem;">Answer the riddle to reveal the next chapter of photos!</p>
+      <p style="font-size: 0.85rem; color: #ff758c; font-weight: 600; margin-top: 5px;">
+        (Sections Left to Unlock: <span id="puzzles-left">5</span>)
+      </p>
+
+      <p id="puzzle-question">Loading Riddle...</p>
+      <input type="text" id="puzzle-input" placeholder="Type answer here..." autocomplete="off">
+      <br>
+      <button id="puzzle-submit">Submit Answer</button>
+    </div>
+
+    <!-- 5 REVEALABLE GALLERY SECTIONS (Total 59 Photos divided into 5 parts) -->
+    <div id="gallery-wrapper">
+      <div class="reveal-section" id="section-1">
+        <h3 class="section-title">Chapter 1: The Beginning ❤️</h3>
+        <div class="gallery-grid" id="grid-1"></div>
+      </div>
+
+      <div class="reveal-section" id="section-2">
+        <h3 class="section-title">Chapter 2: Spontaneous Adventures ✨</h3>
+        <div class="gallery-grid" id="grid-2"></div>
+      </div>
+
+      <div class="reveal-section" id="section-3">
+        <h3 class="section-title">Chapter 3: Sweet Moments Together 🌹</h3>
+        <div class="gallery-grid" id="grid-3"></div>
+      </div>
+
+      <div class="reveal-section" id="section-4">
+        <h3 class="section-title">Chapter 4: A New Journey 🇨🇦</h3>
+        <div class="gallery-grid" id="grid-4"></div>
+      </div>
+
+      <div class="reveal-section" id="section-5">
+        <h3 class="section-title">Chapter 5: Forever & Always 💍</h3>
+        <div class="gallery-grid" id="grid-5"></div>
+      </div>
+    </div>
+
+    <!-- 3D VIDEO SPIRAL SECTION -->
+    <div class="letter-card" style="text-align: center; border-left: none; border-top: 5px solid var(--primary-color); margin-top: 40px;">
+      <h2>Our Video Memories 🎥</h2>
+      <p style="color: #666; font-size: 0.9rem;">Hover over the spiral to freeze and watch!</p>
+      
+      <div class="spiral-wrapper">
+        <div class="spiral-container" id="video-spiral"></div>
+      </div>
+    </div>
+
+    <!-- Closing Message -->
+    <div class="letter-card" style="text-align: center; border-left: none; border-top: 5px solid var(--primary-color);">
+      <h2>Here's to Many More Years Together ✨</h2>
+      <p>Forever and always, my love!</p>
+    </div>
+
+  </div>
+
+  <script>
+    // 1. Days Counter
+    const startDate = new Date('2021-08-25T00:00:00');
+    function updateCounter() {
+      const now = new Date();
+      const diffTime = Math.abs(now - startDate);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('counter').innerText = `${diffDays} Days Together & Counting ❤️`;
+    }
+    updateCounter();
+
+    // 2. Divide 59 Photos into 5 Sections
+   const totalPhotos = 59;
+    const photosPerSection = [12, 12, 12, 12, 11];
+    let currentPhotoIndex = 1;
+
+    for (let sec = 1; sec <= 5; sec++) {
+      const gridContainer = document.getElementById(`grid-${sec}`);
+      const count = photosPerSection[sec - 1];
+
+      for (let i = 0; i < count; i++) {
+        const photoNum = currentPhotoIndex;
+        const photoCard = document.createElement('div');
+        photoCard.className = 'photo-card';
+
+        const img = document.createElement('img');
+        img.alt = `Memory ${photoNum}`;
+        img.loading = 'lazy';
+
+        // Tries all common file extensions & formatting variations
+        const sources = [
+          `images/photo (${photoNum}).jpg`,
+          `images/photo (${photoNum}).jpeg`,
+          `images/photo (${photoNum}).png`,
+          `images/photo (${photoNum}).JPG`,
+          `images/photo(${photoNum}).jpg`,
+          `images/photo(${photoNum}).png`,
+          `images/Photo (${photoNum}).jpg`
+        ];
+
+        let srcIdx = 0;
+        img.src = sources[srcIdx];
+
+        img.onerror = function() {
+          srcIdx++;
+          if (srcIdx < sources.length) {
+            this.src = sources[srcIdx];
+          }
+        };
+
+        const caption = document.createElement('div');
+        caption.className = 'photo-caption';
+        caption.innerText = `Memory #${photoNum} ❤️`;
+
+        photoCard.appendChild(img);
+        photoCard.appendChild(caption);
+        gridContainer.appendChild(photoCard);
+
+        currentPhotoIndex++;
+      }
+    }
+
+    // 3. Puzzle & Section Reveal Logic
+    const puzzles = [
+      { 
+        q: "Riddle 1: How many rejections did I face before you said you loved me back?", 
+        validAnswers: ["9", "nine"] 
+      },
+      { 
+        q: "Riddle 2: What was the first gift I ever bought for you but you did not take it home?", 
+        validAnswers: ["teddy", "teddy bear"] 
+      },
+      { 
+        q: "Riddle 3: What was the name of our favorite song? [Hint: Its about eyes]", 
+        validAnswers: ["aankhon se batana", "aakhon se batana"] 
+      },
+      { 
+        q: "Riddle 4: What was a special moment we shared in August 2023? [Hint: Travel]", 
+        validAnswers: ["coming to canada", "comming to canada", "canada"] 
+      },
+      { 
+        q: "Riddle 5: What is one thing you love to call our relationship? [Hint: All CAPS]", 
+        validAnswers: ["us"] 
+      }
+    ];
+
+    let currentPuzzleIndex = 0;
+    const questionEl = document.getElementById('puzzle-question');
+    const inputEl = document.getElementById('puzzle-input');
+    const submitBtn = document.getElementById('puzzle-submit');
+    const popupEl = document.getElementById('wrong-popup');
+    const countEl = document.getElementById('puzzles-left');
+
+    function loadPuzzle() {
+      if (currentPuzzleIndex < puzzles.length) {
+        questionEl.innerText = puzzles[currentPuzzleIndex].q;
+        inputEl.value = '';
+        countEl.innerText = puzzles.length - currentPuzzleIndex;
+      } else {
+        document.getElementById('quiz-box').style.display = 'none'; // Hide quiz when complete
+      }
+    }
+
+    function checkAnswer() {
+      const playerAnswer = inputEl.value.trim().toLowerCase().replace(/[^\w\s]/gi, '');
+      const currentPuzzle = puzzles[currentPuzzleIndex];
+
+      const isCorrect = currentPuzzle.validAnswers.some(ans => playerAnswer === ans.toLowerCase());
+
+      if (isCorrect) {
+        // Unlock Section corresponding to answered riddle
+        const sectionToUnlock = document.getElementById(`section-${currentPuzzleIndex + 1}`);
+        sectionToUnlock.classList.add('unlocked');
+        sectionToUnlock.scrollIntoView({ behavior: 'smooth' });
+
+        // Trigger Celebration Balloons!
+        triggerBalloons();
+
+        currentPuzzleIndex++;
+        loadPuzzle();
+      } else {
+        showWrongPopup();
+      }
+    }
+
+    function showWrongPopup() {
+      inputEl.classList.add('shake-input');
+      setTimeout(() => inputEl.classList.remove('shake-input'), 300);
+      popupEl.classList.add('show');
+      setTimeout(() => popupEl.classList.remove('show'), 2000);
+    }
+
+    submitBtn.addEventListener('click', checkAnswer);
+    inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
+    loadPuzzle();
+
+    // 4. Balloon Pop Celebration
+    function triggerBalloons() {
+      const container = document.getElementById('balloon-container');
+      const colors = ['#ff758c', '#ff7eb3', '#e63946', '#ffb3c1', '#ff4d6d'];
+
+      for (let i = 0; i < 20; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        balloon.style.left = `${Math.random() * 90 + 5}%`;
+        balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.animationDuration = `${3 + Math.random() * 2}s`;
+        balloon.style.animationDelay = `${Math.random() * 0.5}s`;
+
+        container.appendChild(balloon);
+
+        setTimeout(() => { balloon.remove(); }, 5000);
+      }
+    }
+
+    // 5. 3D Video Spiral Builder (ADD YOUR VIDEO PATHS HERE LATER)
+    const videoFiles = [
+      // Example: "videos/vid1.mp4", "videos/vid2.mp4", ...
+      "videos/vid1.mp4", "videos/vid2.mp4", "videos/vid3.mp4", 
+      "videos/vid4.mp4", "videos/vid5.mp4", "videos/vid6.mp4"
+    ];
+
+    const spiralContainer = document.getElementById('video-spiral');
+    const totalVideos = videoFiles.length;
+    const radius = 280; // Radius of 3D spiral circle
+
+    videoFiles.forEach((file, index) => {
+      const angle = (index / totalVideos) * 360;
+      const yOffset = (index - totalVideos / 2) * 25; // Creates vertical spiral spacing
+
+      const item = document.createElement('div');
+      item.className = 'spiral-item';
+      item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px) translateY(${yOffset}px)`;
+
+      const video = document.createElement('video');
+      video.src = file;
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true; // Muted by default for browser autoplay rules
+      video.playsInline = true;
+
+      item.appendChild(video);
+      spiralContainer.appendChild(item);
+    });
+  </script>
+
+</body>
+</html>
