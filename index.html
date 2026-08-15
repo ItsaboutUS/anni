@@ -352,27 +352,8 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        // Array matching the exact photos{}{}number pattern with proper encoding
-        const sources = [
-          `images/photos{}${photoNum}.jpg`,
-          `images/photos{%20}{%20}${photoNum}.jpg`,
-          `images/photos{ } ${photoNum}.jpg`,
-          `images/photos{}{}${photoNum}.jpg`,
-          `images/photo{}${photoNum}.jpg`,
-          `images/photos{}${photoNum}.JPG`,
-          `images/photos{}${photoNum}.jpeg`
-        ];
-
-        let srcIdx = 0;
-        img.src = sources[srcIdx];
-
-        // Fallback loop if one variant fails
-        img.onerror = function() {
-          srcIdx++;
-          if (srcIdx < sources.length) {
-            this.src = sources[srcIdx];
-          }
-        };
+        // Simple direct path: images/1.jpg, images/2.jpg, etc.
+        img.src = `images/${photoNum}.jpg`;
 
         const caption = document.createElement('div');
         caption.className = 'photo-caption';
