@@ -218,53 +218,6 @@
       100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
     }
 
-    /* VIDEO SPIRAL SECTION */
-    .spiral-wrapper {
-      position: relative;
-      width: 100%;
-      height: 450px;
-      perspective: 1000px;
-      margin: 40px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .spiral-container {
-      width: 200px;
-      height: 250px;
-      position: absolute;
-      transform-style: preserve-3d;
-      animation: rotateSpiral 20s linear infinite;
-    }
-
-    .spiral-container:hover {
-      animation-play-state: paused;
-    }
-
-    .spiral-item {
-      position: absolute;
-      width: 180px;
-      height: 240px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 3px solid #ff758c;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      background: #000;
-    }
-
-    .spiral-item video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    @keyframes rotateSpiral {
-      from { transform: rotateY(0deg); }
-      to { transform: rotateY(360deg); }
-    }
-
     /* WRONG ANSWER POPUP STYLES */
     #wrong-popup {
       position: absolute;
@@ -362,18 +315,8 @@
       </div>
     </div>
 
-    <!-- 3D VIDEO SPIRAL SECTION -->
-    <div class="letter-card" style="text-align: center; border-left: none; border-top: 5px solid var(--primary-color); margin-top: 40px;">
-      <h2>Our Video Memories 🎥</h2>
-      <p style="color: #666; font-size: 0.9rem;">Hover over the spiral to freeze and watch!</p>
-      
-      <div class="spiral-wrapper">
-        <div class="spiral-container" id="video-spiral"></div>
-      </div>
-    </div>
-
     <!-- Closing Message -->
-    <div class="letter-card" style="text-align: center; border-left: none; border-top: 5px solid var(--primary-color);">
+    <div class="letter-card" style="text-align: center; border-left: none; border-top: 5px solid var(--primary-color); margin-top: 40px;">
       <h2>Here's to Many More Years Together ✨</h2>
       <p>Forever and always, my love!</p>
     </div>
@@ -392,7 +335,7 @@
     updateCounter();
 
     // 2. Divide 59 Photos into 5 Sections
-   const totalPhotos = 59;
+    const totalPhotos = 59;
     const photosPerSection = [12, 12, 12, 12, 11];
     let currentPhotoIndex = 1;
 
@@ -409,19 +352,20 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        // Tries all common file extensions & formatting variations
+        const rawFileName = `photo (${photoNum}).jpg`;
         const sources = [
-  `images/photo (${photoNum}).jpg`,
-  `images/photo (${photoNum}).jpeg`,
-  `images/photo (${photoNum}).png`,
-  `images/photo (${photoNum}).JPG`,
-  `images/photo (${photoNum}).JPEG`,
-  `images/photo (${photoNum}).PNG`,
-  `images/photo${photoNum}.jpg`,
-  `images/photo${photoNum}.JPG`,
-  `images/Photo (${photoNum}).jpg`,
-  `images/Photo (${photoNum}).JPG`
-];
+          `images/${rawFileName}`,
+          `images/${encodeURIComponent(rawFileName)}`,
+          `images/photo (${photoNum}).jpeg`,
+          `images/photo (${photoNum}).png`,
+          `images/photo (${photoNum}).JPG`,
+          `images/photo (${photoNum}).JPEG`,
+          `images/photo (${photoNum}).PNG`,
+          `images/photo${photoNum}.jpg`,
+          `images/photo${photoNum}.JPG`,
+          `images/Photo (${photoNum}).jpg`,
+          `images/Photo (${photoNum}).JPG`
+        ];
 
         let srcIdx = 0;
         img.src = sources[srcIdx];
@@ -537,36 +481,6 @@
         setTimeout(() => { balloon.remove(); }, 5000);
       }
     }
-
-    // 5. 3D Video Spiral Builder (ADD YOUR VIDEO PATHS HERE LATER)
-    const videoFiles = [
-      // Example: "videos/vid1.mp4", "videos/vid2.mp4", ...
-      "videos/vid1.mp4", "videos/vid2.mp4", "videos/vid3.mp4", 
-      "videos/vid4.mp4", "videos/vid5.mp4", "videos/vid6.mp4"
-    ];
-
-    const spiralContainer = document.getElementById('video-spiral');
-    const totalVideos = videoFiles.length;
-    const radius = 280; // Radius of 3D spiral circle
-
-    videoFiles.forEach((file, index) => {
-      const angle = (index / totalVideos) * 360;
-      const yOffset = (index - totalVideos / 2) * 25; // Creates vertical spiral spacing
-
-      const item = document.createElement('div');
-      item.className = 'spiral-item';
-      item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px) translateY(${yOffset}px)`;
-
-      const video = document.createElement('video');
-      video.src = file;
-      video.autoplay = true;
-      video.loop = true;
-      video.muted = true; // Muted by default for browser autoplay rules
-      video.playsInline = true;
-
-      item.appendChild(video);
-      spiralContainer.appendChild(item);
-    });
   </script>
 
 </body>
