@@ -352,22 +352,21 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        // Array covering all case-sensitivity variations (Capital P, uppercase .JPG, spaces vs no-spaces)
+        // Array matching the exact photos{}{}number pattern with proper encoding
         const sources = [
-          `images/photo(${photoNum}).jpg`,
-          `images/Photo(${photoNum}).JPG`,
-          `images/Photo (${photoNum}).JPG`,
-          `images/photo (${photoNum}).jpg`,
-          `images/photo (${photoNum}).JPG`,
-          `images/Photo (${photoNum}).jpg`,
-          `images/photo(${photoNum}).JPG`,
-          `images/photo${photoNum}.jpg`
+          `images/photos{}${photoNum}.jpg`,
+          `images/photos{%20}{%20}${photoNum}.jpg`,
+          `images/photos{ } ${photoNum}.jpg`,
+          `images/photos{}{}${photoNum}.jpg`,
+          `images/photo{}${photoNum}.jpg`,
+          `images/photos{}${photoNum}.JPG`,
+          `images/photos{}${photoNum}.jpeg`
         ];
 
         let srcIdx = 0;
         img.src = sources[srcIdx];
 
-        // Fallback loop if a specific case/extension fails
+        // Fallback loop if one variant fails
         img.onerror = function() {
           srcIdx++;
           if (srcIdx < sources.length) {
