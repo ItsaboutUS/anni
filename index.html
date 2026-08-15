@@ -7,7 +7,7 @@
   <style>
     /* Global Styles */
     :root {
-      --primary-color: #fe63946;
+      --primary-color: #ff69b4;
       --bg-color: #fff0f5;
       --text-color: #2b2d42;
       --card-bg: #ffffff;
@@ -125,6 +125,91 @@
       font-size: 0.9rem;
       font-weight: bold;
     }
+
+    /* Final Celebration & Balloon Styles */
+    #celebration-box {
+      display: none;
+      text-align: center;
+      margin: 40px auto;
+      cursor: pointer;
+    }
+
+    .balloon {
+      width: 100px;
+      height: 120px;
+      background: #ff4d6d;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      margin: 0 auto;
+      position: relative;
+      animation: float 2.5s ease-in-out infinite;
+      box-shadow: inset -10px -10px 20px rgba(0,0,0,0.15);
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 45px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 12px solid #ff4d6d;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50% { transform: translateY(-18px) rotate(3deg); }
+    }
+
+    /* Popped Heart Reveal */
+    #love-message {
+      display: none;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ff1493;
+      text-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+      animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Modal Slideshow Styling */
+    #slideshow-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #slideshow-img {
+      max-width: 90%;
+      max-height: 75vh;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+      object-fit: contain;
+    }
+
+    #slideshow-caption {
+      color: #fff;
+      font-size: 1.3rem;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .close-slideshow {
+      position: absolute;
+      top: 20px; right: 30px;
+      color: #fff;
+      font-size: 2.5rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -144,6 +229,18 @@
       <div class="quiz-input-group">
         <input type="text" id="riddle-input" placeholder="Type your answer...">
         <button onclick="handleRiddleSubmit()">Unlock</button>
+      </div>
+    </div>
+
+    <!-- Celebration Box (Balloon & Love Message) -->
+    <div id="celebration-box">
+      <div id="balloon-container" onclick="popBalloon()">
+        <div class="balloon"></div>
+        <p style="margin-top: 15px; color: #ff1493; font-weight: bold;">Tap the balloon to pop it! 🎈</p>
+      </div>
+      
+      <div id="love-message">
+        💖 I LOVE YOU! 💖
       </div>
     </div>
 
@@ -176,8 +273,15 @@
     </div>
   </div>
 
+  <!-- Fullscreen Photo Slideshow Modal -->
+  <div id="slideshow-modal">
+    <span class="close-slideshow" onclick="closeSlideshow()">&times;</span>
+    <img id="slideshow-img" src="" alt="Memory Slideshow">
+    <div id="slideshow-caption"></div>
+  </div>
+
   <script>
-    // 1. Riddles Configuration with Flexible Answer Support
+    // 1. Riddles Configuration with Multi-Format Support
     const riddles = [
       { 
         question: "How many rejections did I get before you said yes?", 
@@ -269,21 +373,70 @@
         if (currentRiddleIndex <= 5) {
           const nextSection = document.getElementById(`section-${currentRiddleIndex}`);
           
-          // Move quiz box right above next section
+          // Move quiz box right above the next section
           nextSection.parentNode.insertBefore(document.getElementById('quiz-box'), nextSection);
           
           updateRiddleUI(currentRiddleIndex);
           answerInput.value = '';
         } else {
-          // Hide quiz box when all sections unlocked
-          document.getElementById('quiz-box').style.display = 'none';
+          showCelebration();
         }
       } else {
         alert('Incorrect answer! Try again ❤️');
       }
     }
 
-    // Autoplay audio on first interaction to bypass browser restrictions
+    // Allow pressing Enter in the input box to submit
+    document.getElementById('riddle-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleRiddleSubmit();
+      }
+    });
+
+    // 4. Celebration & Balloon Logic
+    function showCelebration() {
+      document.getElementById('quiz-box').style.display = 'none';
+      const celebrationBox = document.getElementById('celebration-box');
+      celebrationBox.style.display = 'block';
+    }
+
+    function popBalloon() {
+      document.getElementById('balloon-container').style.display = 'none';
+      document.getElementById('love-message').style.display = 'block';
+
+      // Start the slideshow after 1.5 seconds
+      setTimeout(startSlideshow, 1500);
+    }
+
+    // 5. Automated Slideshow Logic
+    let slideIndex = 1;
+    let slideshowInterval;
+
+    function startSlideshow() {
+      const modal = document.getElementById('slideshow-modal');
+      modal.style.display = 'flex';
+      
+      updateSlide();
+      slideshowInterval = setInterval(() => {
+        slideIndex = (slideIndex % 63) + 1; // Loops continuously through 1 to 63
+        updateSlide();
+      }, 3000); // Changes image every 3 seconds
+    }
+
+    function updateSlide() {
+      const img = document.getElementById('slideshow-img');
+      const caption = document.getElementById('slideshow-caption');
+      
+      img.src = `images/dj (${slideIndex}).jpg`;
+      caption.innerText = `Memory #${slideIndex} ❤️`;
+    }
+
+    function closeSlideshow() {
+      clearInterval(slideshowInterval);
+      document.getElementById('slideshow-modal').style.display = 'none';
+    }
+
+    // Autoplay audio on first click to bypass browser restrictions
     document.addEventListener('click', () => {
       const music = document.getElementById('bg-music');
       if (music && music.paused) {
