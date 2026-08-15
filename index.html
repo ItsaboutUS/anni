@@ -336,8 +336,8 @@
 
     // 2. Divide 63 Photos into 5 Sections
     const totalPhotos = 63;
-    // Distribution: 14 + 14 + 14 + 14 + 13 = 63 photos
-    const photosPerSection = [13, 13, 13, 13, 11]; // Adjusted to total 63 photos
+    // Distribution: 13 + 13 + 13 + 12 + 12 = 63 photos
+    const photosPerSection = [13, 13, 13, 12, 12];
     let currentPhotoIndex = 1;
 
     for (let sec = 1; sec <= 5; sec++) {
@@ -353,8 +353,8 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        // Matches exact clean pattern: images/dj(1).jpg ... images/dj(69).jpg
-        img.src = `images/dj(${photoNum}).jpg`;
+        // Matches exact pattern with space: images/dj (1).jpg ... images/dj (63).jpg
+        img.src = `images/dj (${photoNum}).jpg`;
 
         const caption = document.createElement('div');
         caption.className = 'photo-caption';
