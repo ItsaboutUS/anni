@@ -352,19 +352,14 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        const rawFileName = `photo (${photoNum}).jpg`;
+        // Direct path matching your exact GitHub filenames: photo(1).jpg
+        const exactFileName = `photo(${photoNum}).jpg`;
+        
         const sources = [
-          `images/${rawFileName}`,
-          `images/${encodeURIComponent(rawFileName)}`,
-          `images/photo (${photoNum}).jpeg`,
-          `images/photo (${photoNum}).png`,
-          `images/photo (${photoNum}).JPG`,
-          `images/photo (${photoNum}).JPEG`,
-          `images/photo (${photoNum}).PNG`,
-          `images/photo${photoNum}.jpg`,
-          `images/photo${photoNum}.JPG`,
-          `images/Photo (${photoNum}).jpg`,
-          `images/Photo (${photoNum}).JPG`
+          `images/${exactFileName}`,
+          `images/${encodeURIComponent(exactFileName)}`,
+          `images/photo (${photoNum}).jpg`, // fallback with space just in case
+          `images/photo${photoNum}.jpg`
         ];
 
         let srcIdx = 0;
