@@ -411,14 +411,17 @@
 
         // Tries all common file extensions & formatting variations
         const sources = [
-          `images/photo (${photoNum}).jpg`,
-          `images/photo (${photoNum}).jpeg`,
-          `images/photo (${photoNum}).png`,
-          `images/photo (${photoNum}).JPG`,
-          `images/photo(${photoNum}).jpg`,
-          `images/photo(${photoNum}).png`,
-          `images/Photo (${photoNum}).jpg`
-        ];
+  `images/photo (${photoNum}).jpg`,
+  `images/photo (${photoNum}).jpeg`,
+  `images/photo (${photoNum}).png`,
+  `images/photo (${photoNum}).JPG`,
+  `images/photo (${photoNum}).JPEG`,
+  `images/photo (${photoNum}).PNG`,
+  `images/photo${photoNum}.jpg`,
+  `images/photo${photoNum}.JPG`,
+  `images/Photo (${photoNum}).jpg`,
+  `images/Photo (${photoNum}).JPG`
+];
 
         let srcIdx = 0;
         img.src = sources[srcIdx];
