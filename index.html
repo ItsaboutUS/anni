@@ -352,19 +352,22 @@
         img.alt = `Memory ${photoNum}`;
         img.loading = 'lazy';
 
-        // Direct path matching your exact GitHub filenames: photo(1).jpg
-        const exactFileName = `photo(${photoNum}).jpg`;
-        
+        // Array covering all case-sensitivity variations (Capital P, uppercase .JPG, spaces vs no-spaces)
         const sources = [
-          `images/${exactFileName}`,
-          `images/${encodeURIComponent(exactFileName)}`,
-          `images/photo (${photoNum}).jpg`, // fallback with space just in case
+          `images/photo(${photoNum}).jpg`,
+          `images/Photo(${photoNum}).JPG`,
+          `images/Photo (${photoNum}).JPG`,
+          `images/photo (${photoNum}).jpg`,
+          `images/photo (${photoNum}).JPG`,
+          `images/Photo (${photoNum}).jpg`,
+          `images/photo(${photoNum}).JPG`,
           `images/photo${photoNum}.jpg`
         ];
 
         let srcIdx = 0;
         img.src = sources[srcIdx];
 
+        // Fallback loop if a specific case/extension fails
         img.onerror = function() {
           srcIdx++;
           if (srcIdx < sources.length) {
