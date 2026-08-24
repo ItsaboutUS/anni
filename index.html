@@ -88,6 +88,81 @@
       line-height: 1.8;
     }
 
+    /* Video Carousel Styling */
+    .video-carousel-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .video-carousel-card h3 {
+      color: #ff1493;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .carousel-container {
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-wrapper {
+      width: 100%;
+      height: 380px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 20, 147, 0.8);
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(255, 20, 147, 1);
+    }
+
+    .carousel-btn.prev { left: -15px; }
+    .carousel-btn.next { right: -15px; }
+
+    .video-counter {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #ff1493;
+    }
+
     /* Quiz Box Styling */
     #quiz-box {
       background: var(--card-bg);
@@ -157,7 +232,6 @@
       justify-content: space-between;
     }
 
-    /* Image Styling */
     .photo-card img {
       width: 100%;
       height: 260px;
@@ -169,7 +243,6 @@
       pointer-events: none;
     }
 
-    /* Unlocked state clears blur & enables click to view */
     .reveal-section.unlocked .photo-card img {
       filter: blur(0) opacity(1);
       pointer-events: auto;
@@ -187,7 +260,7 @@
       background: #ffffff;
     }
 
-    /* Floating Balloons Burst on Section Reveal */
+    /* Floating Balloons Burst */
     .floating-balloon {
       position: fixed;
       bottom: -100px;
@@ -250,7 +323,6 @@
       50% { transform: translateY(-18px) rotate(4deg); }
     }
 
-    /* Love Message Reveal */
     #love-message {
       display: none;
       font-size: 2.8rem;
@@ -265,7 +337,7 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    /* Image Lightbox Modal (For Unlocked Single Image Viewing) */
+    /* Image Lightbox Modal */
     #image-modal {
       display: none;
       position: fixed;
@@ -369,6 +441,22 @@
       </p>
     </div>
 
+    <!-- Video Carousel -->
+    <div class="video-carousel-card">
+      <h3>Our Special Moments 🎥</h3>
+      <div class="carousel-container">
+        <button class="carousel-btn prev" onclick="changeVideo(-1)">❮</button>
+        <div class="video-wrapper">
+          <video id="carousel-video" controls>
+            <source id="video-source" src="" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <button class="carousel-btn next" onclick="changeVideo(1)">❯</button>
+      </div>
+      <div class="video-counter" id="video-counter">Video 1 of 11</div>
+    </div>
+
     <!-- Moving Quiz Box -->
     <div id="quiz-box">
       <h3 id="riddle-title">Chapter 1 Riddle</h3>
@@ -445,7 +533,47 @@
     }
     calculateDays();
 
-    // 1. Riddles Configuration
+    // Video Carousel List matching exact files from your videos folder
+    const videoList = [
+      'videos/vid (0).MOV',
+      'videos/vid (1).mp4',
+      'videos/vid (2).MOV',
+      'videos/vid (2).mp4',
+      'videos/vid (3).MOV',
+      'videos/vid (3).mp4',
+      'videos/vid (4).MOV',
+      'videos/vid (5).MOV',
+      'videos/vid (6).MOV',
+      'videos/vid (7).MOV',
+      'videos/vid (8).MOV'
+    ];
+
+    let currentVideoIndex = 0;
+
+    function loadVideo(index) {
+      const videoElement = document.getElementById('carousel-video');
+      const videoSource = document.getElementById('video-source');
+      const counterElement = document.getElementById('video-counter');
+
+      videoSource.src = videoList[index];
+      videoElement.load();
+      counterElement.innerText = `Video ${index + 1} of ${videoList.length}`;
+    }
+
+    function changeVideo(direction) {
+      currentVideoIndex += direction;
+      if (currentVideoIndex < 0) {
+        currentVideoIndex = videoList.length - 1;
+      } else if (currentVideoIndex >= videoList.length) {
+        currentVideoIndex = 0;
+      }
+      loadVideo(currentVideoIndex);
+    }
+
+    // Initialize first video
+    loadVideo(0);
+
+    // Riddles Configuration
     const riddles = [
       { 
         question: "How many rejections did I get before you said yes?", 
@@ -471,7 +599,7 @@
 
     let currentRiddleIndex = 1;
 
-    // 2. Divide 63 Photos into 5 Sections (13, 13, 13, 12, 12)
+    // Divide 63 Photos into 5 Sections (13, 13, 13, 12, 12)
     const totalPhotos = 63;
     const photosPerSection = [13, 13, 13, 12, 12];
     let currentPhotoIndex = 1;
@@ -490,7 +618,6 @@
         img.loading = 'lazy';
         img.src = `images/dj (${photoNum}).jpg`;
 
-        // Click event to open image lightbox if section is unlocked
         img.addEventListener('click', function() {
           const parentSection = img.closest('.reveal-section');
           if (parentSection.classList.contains('unlocked')) {
@@ -516,7 +643,7 @@
     }
     updateRiddleUI(1);
 
-    // 3. Quiz Submission & Balloon Spawning
+    // Quiz Submission & Balloon Spawning
     function handleRiddleSubmit() {
       const answerInput = document.getElementById('riddle-input');
       const rawUserAnswer = answerInput.value;
@@ -530,19 +657,15 @@
         : clean(currentRiddle.answer) === userCleaned;
 
       if (isCorrect) {
-        // Unlock current section
         const currentSection = document.getElementById(`section-${currentRiddleIndex}`);
         currentSection.classList.add('unlocked');
 
-        // Trigger floating balloons burst across screen
         triggerBalloonBurst();
 
         currentRiddleIndex++;
 
         if (currentRiddleIndex <= 5) {
           const nextSection = document.getElementById(`section-${currentRiddleIndex}`);
-          
-          // Move quiz box directly above newly revealed section
           nextSection.parentNode.insertBefore(document.getElementById('quiz-box'), nextSection);
           
           updateRiddleUI(currentRiddleIndex);
@@ -561,7 +684,6 @@
       }
     });
 
-    // Spawn 15 Floating Balloons across screen on correct answer
     function triggerBalloonBurst() {
       const colors = ['#ff4d6d', '#ff1493', '#ff69b4', '#ff85a2', '#ff007f'];
       for (let i = 0; i < 15; i++) {
@@ -578,7 +700,6 @@
       }
     }
 
-    // 4. Image Lightbox Modal Functions (Open & Close with Cross Mark)
     function openImageModal(src, captionText) {
       const modal = document.getElementById('image-modal');
       const modalImg = document.getElementById('modal-img');
@@ -593,7 +714,6 @@
       document.getElementById('image-modal').style.display = 'none';
     }
 
-    // Close lightbox on Escape key
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeImageModal();
@@ -601,7 +721,6 @@
       }
     });
 
-    // 5. Final Celebration Box & Pop Balloon
     function showCelebration() {
       document.getElementById('quiz-box').style.display = 'none';
       const celebrationBox = document.getElementById('celebration-box');
@@ -612,11 +731,9 @@
       document.getElementById('balloon-container').style.display = 'none';
       document.getElementById('love-message').style.display = 'block';
 
-      // Start slideshow after 1.5 seconds
       setTimeout(startSlideshow, 1500);
     }
 
-    // 6. Automated Slideshow Logic
     let slideIndex = 1;
     let slideshowInterval;
 
