@@ -66,29 +66,7 @@
       padding: 0 15px;
     }
 
-    /* Main Love Letter Card Styling */
-    .letter-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 25px 30px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      margin-bottom: 30px;
-      border-left: 5px solid #ff1493;
-    }
-
-    .letter-card h2 {
-      color: #ff1493;
-      margin-bottom: 15px;
-      font-size: 1.4rem;
-    }
-
-    .letter-card p {
-      font-size: 1rem;
-      color: #4a4a4a;
-      line-height: 1.8;
-    }
-
-    /* Video Carousel Styling */
+    /* Video Carousel Styling at Top */
     .video-carousel-card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -161,6 +139,28 @@
       font-size: 0.9rem;
       font-weight: bold;
       color: #ff1493;
+    }
+
+    /* Main Love Letter Card Styling */
+    .letter-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 25px 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+      border-left: 5px solid #ff1493;
+    }
+
+    .letter-card h2 {
+      color: #ff1493;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .letter-card p {
+      font-size: 1rem;
+      color: #4a4a4a;
+      line-height: 1.8;
     }
 
     /* Quiz Box Styling */
@@ -431,6 +431,22 @@
 
   <div class="container">
     
+    <!-- Top Auto-Spinning Video Carousel -->
+    <div class="video-carousel-card">
+      <h3>Our Special Moments 🎥</h3>
+      <div class="carousel-container">
+        <button class="carousel-btn prev" onclick="manualVideoChange(-1)">❮</button>
+        <div class="video-wrapper">
+          <video id="carousel-video" autoplay loop muted playsinline>
+            <source id="video-source" src="" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <button class="carousel-btn next" onclick="manualVideoChange(1)">❯</button>
+      </div>
+      <div class="video-counter" id="video-counter">Video 1 of 11</div>
+    </div>
+
     <!-- Main Love Letter -->
     <div class="letter-card">
       <h2>To My Favorite Person,</h2>
@@ -439,22 +455,6 @@
         <br><br>
         Thank you for being my constant support, my best friend, and my favorite person in the world. Solve the riddles below to unlock our memories chapter by chapter! ❤️
       </p>
-    </div>
-
-    <!-- Video Carousel -->
-    <div class="video-carousel-card">
-      <h3>Our Special Moments 🎥</h3>
-      <div class="carousel-container">
-        <button class="carousel-btn prev" onclick="changeVideo(-1)">❮</button>
-        <div class="video-wrapper">
-          <video id="carousel-video" controls>
-            <source id="video-source" src="" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <button class="carousel-btn next" onclick="changeVideo(1)">❯</button>
-      </div>
-      <div class="video-counter" id="video-counter">Video 1 of 11</div>
     </div>
 
     <!-- Moving Quiz Box -->
@@ -533,7 +533,7 @@
     }
     calculateDays();
 
-    // Video Carousel List matching exact files from your videos folder
+    // Video Carousel List
     const videoList = [
       'videos/vid (0).MOV',
       'videos/vid (1).mp4',
@@ -549,6 +549,7 @@
     ];
 
     let currentVideoIndex = 0;
+    let videoCarouselTimer;
 
     function loadVideo(index) {
       const videoElement = document.getElementById('carousel-video');
@@ -557,6 +558,7 @@
 
       videoSource.src = videoList[index];
       videoElement.load();
+      videoElement.play().catch(() => {});
       counterElement.innerText = `Video ${index + 1} of ${videoList.length}`;
     }
 
@@ -570,8 +572,26 @@
       loadVideo(currentVideoIndex);
     }
 
-    // Initialize first video
+    // Auto-advance video carousel every 5 seconds
+    function startVideoCarousel() {
+      stopVideoCarousel();
+      videoCarouselTimer = setInterval(() => {
+        changeVideo(1);
+      }, 5000);
+    }
+
+    function stopVideoCarousel() {
+      if (videoCarouselTimer) clearInterval(videoCarouselTimer);
+    }
+
+    function manualVideoChange(direction) {
+      changeVideo(direction);
+      startVideoCarousel(); // Reset timer on manual click
+    }
+
+    // Initialize first video and auto-spin
     loadVideo(0);
+    startVideoCarousel();
 
     // Riddles Configuration
     const riddles = [
